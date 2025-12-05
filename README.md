@@ -1,8 +1,35 @@
+![Mixpeek Benchmarks](assets/header.png)
+
 # Multimodal Benchmarks
 
 The open evaluation suite for multimodal retrieval systems.
 
 Standard datasets, queries, and relevance judgments for benchmarking retrieval across video, image, audio, and document modalities—particularly in regulated and high-stakes domains.
+
+## 🎯 Quick Start
+
+Choose your benchmark and get started in 60 seconds:
+
+| Benchmark | Domain | Learn More | Leaderboard |
+|-----------|--------|------------|-------------|
+| **[Financial Documents](finance/)** | SEC filings, earnings reports | **[mxp.co/finance](https://mxp.co/finance)** | [View →](finance/LEADERBOARD.md) |
+| **[Medical Devices](device/)** | IFUs, regulatory docs | **[mxp.co/device](https://mxp.co/device)** | [View →](device/LEADERBOARD.md) |
+| **[Curriculum Search](learning/)** | Educational videos, lectures | **[mxp.co/learning](https://mxp.co/learning)** | [View →](learning/LEADERBOARD.md) |
+
+### Run Any Benchmark
+
+```bash
+# Finance benchmark
+cd finance && python run.py --quick
+
+# Medical device benchmark
+cd device && python run.py --quick
+
+# Curriculum benchmark
+cd learning && python run.py --quick
+```
+
+Each runs in ~1 second with demo data. See [QUICKSTART.md](QUICKSTART.md) for full guide.
 
 ## Why This Exists
 
@@ -10,88 +37,135 @@ Most retrieval benchmarks assume text-only search on clean web data. Real-world 
 
 - **Medical device IFUs** with nested tables, diagrams, and regulatory language
 - **SEC filings** with embedded charts, footnotes, and cross-references
-- **Warehouse safety videos** requiring temporal understanding
-- **Ad creatives** spanning image, video, and audio brand safety signals
+- **Educational videos** requiring temporal understanding and code-lecture alignment
+- **Regulatory documents** spanning technical specs, clinical data, and safety reports
 
 This repo provides ground-truth evaluation sets for these verticals—so you can measure what actually matters.
 
-## Benchmarks
+## 📊 Benchmarks Overview
 
-| Benchmark | Modalities | Queries | Status |
-|-----------|------------|---------|--------|
-| `medical-device-ifu` | Document, Image | 500+ | ✅ Available |
-| `finance-sec` | Document, Table | 400+ | ✅ Available |
-| `ad-safety` | Video, Image, Audio | 300+ | 🚧 Coming Soon |
-| `warehouse-safety-video` | Video | 200+ | 🚧 Coming Soon |
+All benchmarks are **available now** and include sample queries with human-annotated relevance judgments.
 
-## Structure
+| Benchmark | Best NDCG@10 | Status | Documentation |
+|-----------|--------------|--------|---------------|
+| **[Finance](finance/)** | 0.78 | ✅ Available | [README](finance/README.md) · [Leaderboard](finance/LEADERBOARD.md) |
+| **[Device](device/)** | 0.78 | ✅ Available | [README](device/README.md) · [Leaderboard](device/LEADERBOARD.md) |
+| **[Learning](learning/)** | 0.84 | ✅ Available | [README](learning/README.md) · [Leaderboard](learning/LEADERBOARD.md) |
+
+## 📁 Structure
 
 ```
-multimodal-benchmarks/
-├── medical-device-ifu/
-│   ├── data/                    # Source documents
-│   ├── queries.json             # Natural language queries
-│   ├── relevance_judgments.json # Ground-truth labels
-│   ├── metrics.yaml             # Evaluation config
-│   └── baselines/               # Published baseline results
-├── finance-sec/
-├── ad-safety/
-└── warehouse-safety-video/
+benchmarks/
+├── shared/                      # Shared utilities
+│   ├── metrics.py              # Standard evaluation metrics
+│   ├── evaluator.py            # Benchmark runner
+│   └── __init__.py
+│
+├── finance/                     # Financial document benchmark
+│   ├── run.py                  # Main benchmark script
+│   ├── README.md               # Full documentation
+│   ├── LEADERBOARD.md          # Results leaderboard
+│   └── results/                # Benchmark results
+│
+├── device/                      # Medical device benchmark
+│   ├── run.py
+│   ├── README.md
+│   ├── LEADERBOARD.md
+│   └── results/
+│
+└── learning/                    # Curriculum search benchmark
+    ├── run.py
+    ├── README.md
+    ├── LEADERBOARD.md
+    └── results/
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
-### Install
+### 1. Install Dependencies
 
 ```bash
-pip install multimodal-benchmarks
+# Install shared dependencies
+pip install numpy
 ```
 
-### Evaluate Your Retriever
+### 2. Run a Benchmark
+
+```bash
+# Run with demo data (no setup required)
+cd finance && python run.py --quick
+
+# Run with your own data
+cd finance && python run.py --data-dir /path/to/documents
+```
+
+### 3. Evaluate Your Retriever
+
+All benchmarks use a standard interface:
 
 ```python
-from multimodal_benchmarks import load_benchmark, evaluate
-
-# Load a benchmark
-benchmark = load_benchmark("medical-device-ifu")
+from shared import BenchmarkEvaluator, Query, RelevanceJudgment
 
 # Your retrieval function
 def my_retriever(query: str) -> list[str]:
     # Returns ranked list of document IDs
     ...
 
-# Evaluate
-results = evaluate(
-    retriever=my_retriever,
-    benchmark=benchmark,
-    metrics=["ndcg@10", "recall@5", "mrr"]
+# Create evaluator
+evaluator = BenchmarkEvaluator(
+    name="my-system",
+    retriever_fn=my_retriever,
+    k_values=[5, 10, 20]
 )
 
-print(results)
-# {'ndcg@10': 0.72, 'recall@5': 0.68, 'mrr': 0.81}
+# Run benchmark
+queries = [...]  # Load your queries
+judgments = [...]  # Load ground truth
+report = evaluator.run(queries, judgments)
+
+# Print results
+evaluator.print_summary(report)
+evaluator.save_report(report, "results.json")
 ```
 
-### Run via CLI
+## 📏 Standard Metrics
 
-```bash
-# Evaluate and output results
-multimodal-bench eval \
-  --benchmark medical-device-ifu \
-  --retriever your_config.yaml \
-  --output results.json
-```
+All benchmarks use consistent evaluation metrics:
 
-## Metrics
+- **NDCG@k** - Ranking quality (primary metric)
+- **Recall@k** - Coverage of relevant documents
+- **MRR** - Position of first relevant result
+- **Precision@k** - Accuracy at cutoff
+- **MAP** - Mean Average Precision
+- **Latency (p95)** - 95th percentile response time
 
-Each benchmark supports:
+Detailed metric definitions in [shared/metrics.py](shared/metrics.py)
 
-| Metric | Description |
-|--------|-------------|
-| `ndcg@k` | Normalized Discounted Cumulative Gain |
-| `recall@k` | Proportion of relevant docs in top-k |
-| `mrr` | Mean Reciprocal Rank |
-| `precision@k` | Precision at cutoff k |
-| `map` | Mean Average Precision |
+## 🏆 Leaderboards
+
+Each benchmark maintains its own leaderboard:
+
+- **[Financial Documents →](finance/LEADERBOARD.md)** - Best: 0.78 NDCG@10
+- **[Medical Devices →](device/LEADERBOARD.md)** - Best: 0.78 NDCG@10
+- **[Curriculum Search →](learning/LEADERBOARD.md)** - Best: 0.84 NDCG@10
+
+### Submit Your Results
+
+Beat the baseline? Submit your results:
+
+1. Run benchmark: `cd finance && python run.py`
+2. Results in: `finance/results/benchmark_results.json`
+3. Open PR with results + system description
+4. Appear on the leaderboard!
+
+See individual benchmark READMEs for detailed submission instructions.
+
+## 📚 Documentation
+
+- **[Quick Start Guide](QUICKSTART.md)** - Get started in 60 seconds
+- **[Finance Benchmark](finance/README.md)** - SEC filings, financial docs
+- **[Device Benchmark](device/README.md)** - Medical device IFUs, regulatory docs
+- **[Learning Benchmark](learning/README.md)** - Educational videos, lectures
 
 ## Contributing a Benchmark
 
@@ -113,31 +187,12 @@ We welcome contributions from researchers and practitioners working on vertical-
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
-## Baselines
-
-We publish baseline results for each benchmark using common retrieval approaches:
-
-| Retriever | medical-device-ifu (nDCG@10) | finance-sec (nDCG@10) |
-|-----------|------------------------------|----------------------|
-| BM25 | 0.41 | 0.38 |
-| ColBERT v2 | 0.58 | 0.52 |
-| OpenAI text-embedding-3-large | 0.63 | 0.61 |
-| Mixpeek Multimodal | **0.78** | **0.74** |
-
-Full baseline reproduction scripts available in each benchmark's `baselines/` directory.
-
-## Leaderboard
-
-Submit your results to appear on the public leaderboard:
-
-🏆 **[View Leaderboard →](https://mixpeek.com/benchmarks)**
-
 ## Citation
 
 If you use these benchmarks in your research:
 
 ```bibtex
-@misc{multimodal-benchmarks,
+@misc{mixpeek-multimodal-benchmarks,
   title={Multimodal Benchmarks: Evaluation Suite for Vertical Retrieval Systems},
   author={Mixpeek},
   year={2025},
